@@ -10,5 +10,7 @@ namespace Trycore.EVM.Application.Interfaces
         Task<ProjectResponseDto> CreateAsync(CreateProjectDto dto);
 
         Task<List<ProjectResponseDto>> GetAllAsync();
+
+        Task<ProjectSummaryDto?> GetSummaryAsync(Guid projectId);
     }
 }

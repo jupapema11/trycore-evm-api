@@ -31,4 +31,16 @@ public class ProjectsController : ControllerBase
 
         return Ok(result);
     }
+
+
+    [HttpGet("{id}/summary")]
+    public async Task<IActionResult> GetSummary(Guid id)
+    {
+        var result = await _projectService.GetSummaryAsync(id);
+
+        if (result is null)
+            return NotFound();
+
+        return Ok(result);
+    }
 }
