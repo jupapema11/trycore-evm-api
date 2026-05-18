@@ -2,6 +2,7 @@ using Trycore.EVM.Application.Interfaces;
 using Trycore.EVM.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Trycore.EVM.Infrastructure.Persistence;
+using Trycore.EVM.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddSwaggerGen();
 
 // Dependency Injection
 builder.Services.AddScoped<IEvmCalculationService, EvmCalculationService>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 var app = builder.Build();
 
