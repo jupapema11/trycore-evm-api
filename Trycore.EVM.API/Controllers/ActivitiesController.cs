@@ -22,7 +22,7 @@ namespace Trycore.EVM.API.Controllers
         {
             var result = await _activityService.CreateAsync(projectId, dto);
 
-            return Ok(result);
+            return Created(string.Empty, result);
         }
 
         [HttpGet]

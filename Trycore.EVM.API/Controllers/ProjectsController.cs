@@ -21,7 +21,10 @@ public class ProjectsController : ControllerBase
     {
         var result = await _projectService.CreateAsync(dto);
 
-        return Ok(result);
+        return CreatedAtAction(
+            nameof(GetAll),
+            new { id = result.Id },
+            result);
     }
 
     [HttpGet]

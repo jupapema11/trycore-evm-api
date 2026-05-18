@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Trycore.EVM.Infrastructure.Persistence;
 using Trycore.EVM.Infrastructure.Repositories;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
