@@ -44,3 +44,6 @@ Clean Architecture:
 dotnet restore
 dotnet ef database update --project Trycore.EVM.Infrastructure --startup-project Trycore.EVM.API
 dotnet run --project Trycore.EVM.API
+```
+
+Swagger UI: `https://localhost:44391/swagger-ui`

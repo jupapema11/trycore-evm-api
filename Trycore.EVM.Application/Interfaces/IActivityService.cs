@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Trycore.EVM.Application.DTOs;
+﻿using Trycore.EVM.Application.DTOs;
 
-namespace Trycore.EVM.Application.Interfaces
+namespace Trycore.EVM.Application.Interfaces;
+
+public interface IActivityService
 {
-    public interface IActivityService
-    {
-        Task<ActivityResponseDto> CreateAsync(Guid projectId, CreateActivityDto dto);
+    Task<ActivityResponseDto> CreateAsync(Guid projectId, CreateActivityDto dto);
 
-        Task<List<ActivityResponseDto>> GetByProjectIdAsync(Guid projectId);
-    }
+    Task<List<ActivityResponseDto>> GetByProjectIdAsync(Guid projectId);
+
+    Task<ActivityResponseDto?> UpdateAsync(Guid projectId, Guid activityId, UpdateActivityDto dto);
+
+    Task<bool> DeleteAsync(Guid projectId, Guid activityId);
 }

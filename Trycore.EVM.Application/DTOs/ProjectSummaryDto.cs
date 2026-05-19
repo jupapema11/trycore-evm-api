@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Trycore.EVM.Application.DTOs;
+﻿namespace Trycore.EVM.Application.DTOs;
 
 public class ProjectSummaryDto
 {
@@ -16,6 +12,8 @@ public class ProjectSummaryDto
 
     public decimal TotalAC { get; set; }
 
+    public decimal TotalBAC { get; set; }
+
     public decimal TotalCV { get; set; }
 
     public decimal TotalSV { get; set; }
@@ -27,4 +25,8 @@ public class ProjectSummaryDto
     public decimal TotalEAC { get; set; }
 
     public decimal TotalVAC { get; set; }
+
+    public string CpiInterpretation { get; set; } = string.Empty;
+
+    public string SpiInterpretation { get; set; } = string.Empty;
 }

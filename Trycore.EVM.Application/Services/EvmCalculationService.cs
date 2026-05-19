@@ -1,3 +1,4 @@
+using Trycore.EVM.Application.Constants;
 using Trycore.EVM.Application.Interfaces;
 
 namespace Trycore.EVM.Application.Services;
@@ -9,7 +10,7 @@ public class EvmCalculationService : IEvmCalculationService
         if (bac <= 0)
             return 0;
 
-        return (plannedPercent / 100m) * bac;
+        return (plannedPercent / EvmConstants.PercentDivisor) * bac;
     }
 
     public decimal CalculateEV(decimal actualPercent, decimal bac)
@@ -17,7 +18,7 @@ public class EvmCalculationService : IEvmCalculationService
         if (bac <= 0)
             return 0;
 
-        return (actualPercent / 100m) * bac;
+        return (actualPercent / EvmConstants.PercentDivisor) * bac;
     }
 
     public decimal CalculateCV(decimal ev, decimal ac)

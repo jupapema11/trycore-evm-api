@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Trycore.EVM.Domain.Entitites;
+﻿using Trycore.EVM.Domain.Entitites;
 
-namespace Trycore.EVM.Application.Interfaces
+namespace Trycore.EVM.Application.Interfaces;
+
+public interface IProjectRepository
 {
-    public interface IProjectRepository
-    {
-        Task<Project> CreateAsync(Project project);
+    Task<Project> CreateAsync(Project project);
 
-        Task<List<Project>> GetAllAsync();
+    Task<List<Project>> GetAllAsync();
 
-        Task<Project?> GetByIdAsync(Guid id);
+    Task<Project?> GetByIdAsync(Guid id);
 
-        Task SaveChangesAsync();
-    }
+    Task<bool> UpdateAsync(Project project);
+
+    Task<bool> DeleteAsync(Guid id);
+
+    Task SaveChangesAsync();
 }
