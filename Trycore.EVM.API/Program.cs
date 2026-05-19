@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Trycore.EVM.API.Configuration;
 using Trycore.EVM.Application.Interfaces;
 using Trycore.EVM.Application.Services;
 using Trycore.EVM.Infrastructure.Persistence;
@@ -9,14 +10,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 var isTesting = builder.Environment.IsEnvironment("Testing");
+var connectionString = ConnectionStringFactory.Resolve(builder.Configuration);
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+if (!isTesting)
 {
-    if (isTesting)
-        options.UseInMemoryDatabase("TrycoreEvmTests");
-    else
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+    if (string.IsNullOrWhiteSpace(connectionString))
+        throw new InvalidOperationException(
+            "Database connection not configured. Set ConnectionStrings__DefaultConnection or DATABASE_URL.");
+
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(connectionString));
+}
+else
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseInMemoryDatabase("TrycoreEvmTests"));
+}
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -32,11 +41,15 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 
+var corsOrigins = builder.Configuration["CORS_ORIGINS"]?
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+    ?? ["http://localhost:4200"];
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins(corsOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -50,6 +63,12 @@ if (app.Environment.IsEnvironment("Testing"))
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     dbContext.Database.EnsureCreated();
 }
+else if (!isTesting)
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -58,10 +77,13 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
-if (!app.Environment.IsEnvironment("Testing"))
+if (app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
-app.UseCors("AllowLocalhost");
+
+app.UseCors("AllowFrontend");
 app.UseAuthorization();
+
+app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
 app.MapControllers();
 
 app.Run();

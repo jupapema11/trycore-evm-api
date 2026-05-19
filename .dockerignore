@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.git/
+**/.gitignore
+**/TestResults/
+**/*.user
+**/*.suo
+**/node_modules/
+README.md
+DEPLOY_RENDER.md
